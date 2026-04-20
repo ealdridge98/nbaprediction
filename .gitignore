@@ -13,3 +13,13 @@ __pycache__/
 # OS / IDE
 .DS_Store
 .spyderproject
+
+# Large data files
+data/raw/
+data/modelling/
+
+# CSV & data formats
+*.csv
+*.parquet
+*.feather
+*.pkl
