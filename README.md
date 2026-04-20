@@ -1,195 +1,88 @@
-📌 Overview
-This project builds a machine‑learning model to predict whether the home team will win an NBA game. It uses a comprehensive dataset of NBA game statistics and applies:
+🏀 NBA Win Prediction
+A machine learning project focused on predicting NBA game outcomes using historical data, team statistics, and advanced metrics.
+The goal is to evaluate different modeling approaches and measure their predictive performance across NBA seasons.
 
-Advanced team-level feature engineering
-Rolling statistics (form indicators)
-Win streak metrics
-Rest-day & fatigue modelling
-Season performance indicators
-Random Forest and XGBoost classifiers
+📌 Project Overview
+This repository contains code and data pipelines to:
 
-The goal is to demonstrate a complete, industry-quality ML workflow suitable for a data science or sports analytics portfolio.
+Collect and preprocess NBA historical data
+Engineer team- and game-level features
+Train machine learning models to predict game winners
+Evaluate model performance using realistic metrics
+Generate predictions for future NBA games
 
-🏀 Dataset
-The dataset used in this project comes from Kaggle:
-“NBA Basketball Dataset”
-https://www.kaggle.com/datasets/wyattowalsh/basketball
-It includes:
+The project is designed to be season-agnostic, making it easy to update with new NBA seasons.
 
-Game-level boxscore stats
-Home/away team identifiers
-Shooting percentages
-Rebounds, assists, turnovers
-Final points scored
-Season information
-Matchups
-And more
+🧠 Models Used
+Depending on configuration and experimentation, this project may include:
 
-This dataset is transformed into a team-centric table to enable time-series feature engineering.
+Logistic Regression (baseline)
+Random Forest
+Gradient Boosting (XGBoost / LightGBM if available)
+Neural Networks (optional / experimental)
 
-🔧 Feature Engineering
-This is the core of the project.
-Feature engineering significantly increases predictive performance.
-Below are the engineered features included in the final model.
-
-⭐ 1. Rolling Averages (Team Form)
-Rolling averages for each stat:
-
-stat_pts
-stat_reb
-stat_ast
-stat_stl
-stat_blk
-stat_tov
-stat_fg_pct
-stat_fg3_pct
-stat_ft_pct
-
-For windows:
-
-3 games
-5 games
-10 games
-
-Example features:
-stat_pts_roll_5
-stat_reb_roll_10
-stat_fg_pct_roll_3
-
-These capture recent team form.
-
-⭐ 2. Win Streak Features
-Momentum features showing how well a team has performed recently:
-win_streak_1
-win_streak_3
-win_streak_5
-win_streak_10
-
-These represent wins in the last N games (shifted to prevent leakage).
-
-⭐ 3. Rest Days (Fatigue Metrics)
-Fatigue plays a big role in NBA performance.
-Added features:
-
-rest_days — days since last game
-is_b2b — back‑to‑back indicator
-rest_3plus — 3+ rest days
-
-
-⭐ 4. Season Performance Indicators
-These reflect long-term team strength:
-season_win_pct        # cumulative win percentage (shifted)
-season_wins           # cumulative win count
-season_game_number    # progression through the season
-
-
-⭐ 5. Home vs Away Feature Merging
-Team-level features are merged back into a game-level row, creating:
-
-Home team features → home_stat_*, home_win_streak_*, home_rest_days
-Away team features → away_stat_*, away_win_streak_*, away_rest_days
-Difference features:
-
-diff_pts
-diff_reb
-diff_ast
-diff_fg_pct
-diff_pts_roll_5
-diff_win_streak_3
-...
-
-Difference features are extremely strong predictors.
-
-🤖 Machine Learning Models
-Two main models were trained:
-✔ 1. Logistic Regression (Baseline)
-Serves as a simple benchmark.
-Typical accuracy: 60–65%
-
-✔ 2. Random Forest Classifier
-A strong tree‑based model for tabular sports data.
-Typical accuracy: 70–80%
-Outputs include:
-
-Classification report
-Confusion matrix
-Feature importance plot
-
-
-✔ 3. XGBoost (Optional, Recommended)
-Often the strongest model for this dataset.
-Typical accuracy: 75–85%
-
-📈 Model Evaluation
-The project evaluates models using:
+Models are evaluated using:
 
 Accuracy
-Precision / Recall / F1
-Confusion Matrix
-ROC Curve
-Feature Importances
-
-Example (you can replace with your actual numbers):
-Random Forest Accuracy: 0.78
-XGBoost Accuracy: 0.82
+ROC-AUC
+Log Loss
+Cross-validation across seasons
 
 
-📁 Project Structure
-nba-win-prediction/
-│── data/
-│   └── raw/                # Original Kaggle CSVs
-│
-│── notebooks/
-│   └── 01-data-load-and-clean.ipynb
-│   └── 02-feature-engineering.ipynb
-│   └── 03-model-training.ipynb
-│
-│── src/
-│   └── features.py         # (Optional) reusable feature functions
-│   └── model.py            # (Optional) training scripts
-│
-│── outputs/
-│   └── charts/             # Confusion matrix, feature importance, ROC curve
-│   └── metrics/            # Classification reports, accuracy scores
-│
-│── README.md               # Project documentation
+📊 Data
+Typical data sources include:
+
+Historical NBA game results
+Team-level statistics (offensive/defensive ratings)
+Advanced metrics (pace, net rating, ELO-style ratings)
+Home vs away indicators
+Rest days and back-to-back games
 
 
-🚀 How to Run the Project
-1. Clone the repo:
-Shellgit clone https://github.com/<your-username>/nba-win-prediction.gitcd nba-win-predictionShow more lines
-2. Install Python dependencies:
+Note:
+Raw data files are usually excluded from version control due to size or licensing.
+Data can be refreshed by re-running the data ingestion scripts.
+
+
+📂 Project Structure
+Plain Textnba-win-prediction/│├── data/│   ├── raw/                # Original data sources│   ├── processed/          # Cleaned & feature-engineered data│├── notebooks/│   ├── EDA.ipynb           # Exploratory data analysis│   ├── modeling.ipynb      # Model experiments│├── src/│   ├── data_loader.py      # Data ingestion utilities│   ├── feature_engineering.py│   ├── train_model.py│   ├── evaluate.py│├── models/│   ├── saved_models/       # Serialized trained models│├── results/│   ├── metrics/│   ├── predictions/│├── requirements.txt├── README.md└── .gitignoreShow more lines
+
+⚙️ Setup & Installation
+1. Clone the repository
+Shellgit clone https://github.com/your-username/nba-win-prediction.gitcd nba-win-predictionShow more lines
+2. Create a virtual environment
+Shellpython -m venv venvvenv\Scripts\activate   # WindowsShow more lines
+3. Install dependencies
 Shellpip install -r requirements.txtShow more lines
-3. Place Kaggle dataset CSVs into:
-data/raw/
 
-4. Run the notebooks:
+🚀 Usage
+Train a model
+Shellpython src/train_model.pyShow more lines
+Evaluate performance
+Shellpython src/evaluate.pyShow more lines
+Generate predictions
+Shellpython src/predict.py --season 2025Show more lines
+Outputs (metrics and predictions) are saved in the results/ directory.
 
-01-data-load-and-clean.ipynb
-02-feature-engineering.ipynb
-03-model-training.ipynb
+📈 Example Use Cases
 
-5. View charts & results in:
-outputs/
-
-
-🔮 Future Work
-Here are potential project extensions:
-
-Add ELO rating system for team strength
-Include travel distance & timezone shifts
-Add betting line features (Vegas spread, O/U)
-Explore deep learning architectures
-Build a Streamlit or Dash app for game predictions
-Hyperparameter tuning with Optuna
+Compare baseline vs advanced ML models for sports prediction
+Analyze feature importance in NBA outcomes
+Experiment with rolling-season training
+Extend to betting line comparison or expected value analysis
 
 
-🎉 Conclusion
-This project showcases a complete end‑to‑end data science workflow:
+🔄 Updating for New Seasons
 
-Data cleaning
-Feature engineering
-Rolling time‑series analytics
-ML model training
-Evaluation
-GitHub‑ready documentation
+Add the latest season data to data/raw/
+Re-run feature engineering:
+Shellpython src/feature_engineering.pyShow more lines
+
+Retrain models:
+Shellpython src/train_model.pyShow more lines
+
+
+
+⚠️ Disclaimer
+This project is for educational and analytical purposes only.
+It is not financial or betting advice.
